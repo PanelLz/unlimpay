@@ -1,45 +1,40 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Reproductor limpio</title>
   <style>
-    html, body {
-      margin: 0;
-      padding: 0;
-      height: 100%;
-      background-color: #000;
+    body, html {
+      margin: 0; padding: 0; height: 100%;
+      background: #000;
+      display: flex; justify-content: center; align-items: center;
     }
     iframe {
-      border: none;
-      width: 100%;
-      height: 100%;
+      width: 100vw; height: 100vh; border: none;
     }
   </style>
 </head>
 <body>
+  <iframe id="player" src="" allowfullscreen allow="autoplay; fullscreen"></iframe>
 
-<iframe id="player" allowfullscreen allow="autoplay"></iframe>
-
-<script>
-  const params = new URLSearchParams(window.location.search);
-  const codificado = params.get("v");
-
-  if (codificado) {
-    try {
-      const decodificado = atob(codificado);
-      if (decodificado.startsWith("https://streamwish.to/e/")) {
-        document.getElementById("player").src = decodificado;
-      } else {
-        document.body.innerHTML = "<h3 style='color:white;text-align:center'>❌ Enlace inválido</h3>";
-      }
-    } catch (e) {
-      document.body.innerHTML = "<h3 style='color:white;text-align:center'>❌ Enlace corrupto</h3>";
+  <script>
+    // Obtener el parámetro 'v' de la URL
+    function getQueryParam(param) {
+      const params = new URLSearchParams(window.location.search);
+      return params.get(param);
     }
-  } else {
-    document.body.innerHTML = "<h3 style='color:white;text-align:center'>❌ No se proporcionó ningún enlace</h3>";
-  }
-</script>
 
+    const encodedUrl = getQueryParam('v');
+    if (encodedUrl) {
+      // Decodificar Base64
+      const decodedUrl = atob(encodedUrl);
+
+      // Asignar la URL decodificada al iframe
+      document.getElementById('player').src = decodedUrl;
+    } else {
+      document.body.innerHTML = '<p style="color: white; text-align:center;">⚠️ No se encontró enlace válido para reproducir.</p>';
+    }
+  </script>
 </body>
 </html>
